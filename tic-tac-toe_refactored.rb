@@ -4,24 +4,60 @@ module Symbols
 end
 
 #===============================================================================
+
 class Game
 
   include Symbols
+
+  attr_accessor :turn
   
   def initialize
     @board = Board.new
     @game_over = false
+    @turn = 1
+    @player_one = Player.new(1)
+    @player_two = Player.new(2)
   end
 
-  def is_game_over?
-    get_board.is_game_over?
+  def play
+
+    puts "Please provide a move in the format x,y where the top left square is 0,0"
+    
+    while !game_over?
+      curr_player = turn.odd? ? @player_one : @player_two
+      process_input(curr_player)
+      puts get_board.to_s
+      self.turn += 1
+    end
+    puts get_winner
+  end
+
+  def process_input(player)
+    valid_input = false
+    valid_move = false
+    
+    while !valid_input && !valid_move
+      print player.to_s + "'s turn:" 
+      action = gets.chomp
+      
+      if action.match(/[0-2],[0-2]/) 
+        validity = true
+        move_arr = action.split(",")
+        valid_move = move(move_arr[0], move_arr[1], player)
+      end
+    end
+  end
+    
+
+  def game_over?
+    get_board.consecutive_three?(SYMBOL_1) || get_board.consecutive_three?(SYMBOL_2) || get_board.board_full?
   end
 
   def get_winner
     if get_board.consecutive_three?(SYMBOL_1)
-      return "player 1 wins!"
+      "player 1 wins!"
     elsif get_board.consecutive_three?(SYMBOL_2)
-      return "player 2 wins!"
+      "player 2 wins!"
     else
       "Draw!"
     end
@@ -32,11 +68,11 @@ class Game
   end
 
   def display_board
-    puts @board.to_s
+    puts get_board.to_s
   end
 
   def to_s
-    @board.to_s
+    get_board.to_s
   end
 
   protected
@@ -46,7 +82,9 @@ class Game
   end
 
 end
+
 #===============================================================================
+
 class Board
 
   include Symbols
@@ -58,7 +96,6 @@ class Board
     @game_over = false
   end
 
-  # TODO
   def board_full?
     # use reduce to count number of " ". full if no. of " " == 0
     empty_count = @arr.reduce(0) do |count, curr|
@@ -77,7 +114,10 @@ class Board
     flag = false
 
     for x in 0..2
-      if (@arr[x].filter{|cell| cell == symbol}.length == 3) || ((@arr[0][x] == symbol) && (@arr[1][x] == symbol) && (@arr[2][x] == symbol))
+      if (@arr[x].filter{|cell| cell == symbol}.length == 3) || 
+         ((@arr[0][x] == symbol) && 
+         (@arr[1][x] == symbol) && 
+         (@arr[2][x] == symbol))
         flag = true
       end
     end
@@ -91,23 +131,11 @@ class Board
     end
     flag
   end
-    
 
-  # TODO
-  # check if:
-  # - any 3 symbols in a row
-  # - no 3 symbols in a row AND board is full (draw)
-  def is_game_over?
-    consecutive_three?(SYMBOL_1) || consecutive_three?(SYMBOL_2) || board_full?
-  end
-
-
-  # TODO
   def add_to_board(i,j,symbol)
-    i = i.to_i
-    j = j.to_i
-    if @arr[i][j] == " "
-      @arr[i][j] = symbol
+
+    if @arr[i.to_i][j.to_i] == " "
+      @arr[i.to_i][j.to_i] = symbol
       return true
     else
       return false
@@ -125,6 +153,7 @@ class Board
 end
 
 #===============================================================================
+
 class Player
 
   include Symbols
@@ -148,42 +177,13 @@ end
 #===============================================================================
 
 
-def process_input(game, player, turn)
-  valid_input = false
-  valid_move = false
- 
-  while !valid_input && !valid_move
-    print player.to_s + "'s turn:" 
-    action = gets.chomp
-    
-    if action.match(/[0-2],[0-2]/) 
-      validity = true
-      move_arr = action.split(",")
-      valid_move = game.move(move_arr[0], move_arr[1], player)
-    end
-  end
+def play_game
+  game = Game.new()
+  game.play
+  play_again
 end
 
-
-# Program loop
-on = true
-while on
-  # Initialize objects
-  puts "Please provide a move in the format x,y where the top left square is 0,0"
-  game = Game.new
-  player_one = Player.new(1)
-  player_two = Player.new(2)
-  turn = 1
-
-  # Game loop
-  while !game.is_game_over?
-    curr_player = turn.odd? ? player_one : player_two
-    process_input(game, curr_player, turn)
-    puts game.to_s
-    turn += 1
-  end
-  puts game.get_winner
-
+def play_again
   # After game ends, give option to play again or end program
   answer = ""
   while answer != "y" && answer != "n"
@@ -192,13 +192,16 @@ while on
 
     if answer == "n"
       puts "Shutting down......."
-      on = false
     elsif answer != "y"
       puts "invalid answer"
     else
       puts "Another game!"
+      play_game
     end
   end
 end
 
+#===============================================================================
 
+play_game
+  
