@@ -19,9 +19,9 @@ class Game
 
   def get_winner
     if get_board.consecutive_three?(SYMBOL_1)
-      return "player 1 wins!"
+      "player 1 wins!"
     elsif get_board.consecutive_three?(SYMBOL_2)
-      return "player 2 wins!"
+      "player 2 wins!"
     else
       "Draw!"
     end
@@ -91,7 +91,6 @@ class Board
     end
     flag
   end
-    
 
   # TODO
   # check if:
