@@ -4,7 +4,7 @@ class Game
 
   include Symbols
 
-  attr_accessor :turn
+  attr_accessor :turn, :player_one
   
   def initialize
     @board = Board.new
@@ -38,7 +38,8 @@ class Game
       if action.match(/[0-2],[0-2]/) 
         validity = true
         move_arr = action.split(",")
-        valid_move = move(move_arr[0], move_arr[1], player)
+        valid_move = move(move_arr[0], move_arr[1], player) # causing processinput move and print mocks to fail
+       # valid_move = true
       end
     end
   end
@@ -46,6 +47,11 @@ class Game
 
   def game_over?
     get_board.consecutive_three?(SYMBOL_1) || get_board.consecutive_three?(SYMBOL_2) || get_board.board_full?
+
+    # one = get_board.consecutive_three?(SYMBOL_1)
+    # two = get_board.consecutive_three?(SYMBOL_2)
+    # three = get_board.board_full?
+    # one || two || three
   end
 
   def get_winner

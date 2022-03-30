@@ -8,10 +8,10 @@ class Player
   def initialize(num)
     if num == 1
       @num = 1
-      @symbol = SYMBOL_1
+      @symbol = "X"
     else
       @num = 2
-      @symbol = SYMBOL_2
+      @symbol = "O"
     end
   end
 

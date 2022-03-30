@@ -29,4 +29,10 @@ def play_again
 end
 
 
-play_game
+# play_game
+
+
+# player = Player.new(1)
+
+# game = Game.new()
+# game.process_input(game.player_one)
