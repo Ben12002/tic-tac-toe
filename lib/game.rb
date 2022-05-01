@@ -1,10 +1,10 @@
-require_relative 'symbols.rb'
+# require_relative 'symbols.rb'
 
 class Game
 
   include Symbols
 
-  attr_accessor :turn, :player_one
+  attr_accessor :turn, :player_one, :player_two
   
   def initialize
     @board = Board.new
@@ -21,7 +21,7 @@ class Game
     while !game_over?
       curr_player = turn.odd? ? @player_one : @player_two
       process_input(curr_player)
-      puts get_board.to_s
+      puts @board.to_s
       self.turn += 1
     end
     puts get_winner
@@ -46,18 +46,17 @@ class Game
     
 
   def game_over?
-    get_board.consecutive_three?(SYMBOL_1) || get_board.consecutive_three?(SYMBOL_2) || get_board.board_full?
+    player_one_wins = @board.consecutive_three?(SYMBOL_1)
+    player_two_wins = @board.consecutive_three?(SYMBOL_2)
+    draw = @board.board_full?
 
-    # one = get_board.consecutive_three?(SYMBOL_1)
-    # two = get_board.consecutive_three?(SYMBOL_2)
-    # three = get_board.board_full?
-    # one || two || three
+    player_one_wins || player_two_wins || draw
   end
 
   def get_winner
-    if get_board.consecutive_three?(SYMBOL_1)
+    if @board.consecutive_three?(SYMBOL_1)
       "player 1 wins!"
-    elsif get_board.consecutive_three?(SYMBOL_2)
+    elsif @board.consecutive_three?(SYMBOL_2)
       "player 2 wins!"
     else
       "Draw!"
@@ -65,21 +64,15 @@ class Game
   end
 
   def move(i,j, player)
-    get_board.add_to_board(i,j,player.symbol)
+    @board.add_to_board(i,j,player.symbol)
   end
 
   def display_board
-    puts get_board.to_s
+    puts @board.to_s
   end
 
   def to_s
-    get_board.to_s
-  end
-
-  protected
-
-  def get_board
-    @board
+    @board.to_s
   end
 
 end

@@ -29,7 +29,7 @@ def play_again
 end
 
 
-# play_game
+play_game
 
 
 # player = Player.new(1)
