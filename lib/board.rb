@@ -1,8 +1,5 @@
-require_relative 'symbols.rb'
 
 class Board
-
-  include Symbols
   
   def initialize
     @arr = [[" "," "," "],
@@ -47,22 +44,22 @@ class Board
     flag
   end
 
-  def add_to_board(i,j,symbol)
+  def valid_move?(i,j)
+    @arr[i.to_i][j.to_i] == " "
+  end
 
-    if @arr[i.to_i][j.to_i] == " "
+  def add_to_board(i,j,symbol)
       @arr[i.to_i][j.to_i] = symbol
-      return true
-    else
-      return false
-    end
   end
 
   def to_s
-   "       #{@arr[0][0]} |  #{@arr[1][0]} |  #{@arr[2][0]}\n 
-   ----------------------\n  
-       #{@arr[0][1]} | #{@arr[1][1]} | #{@arr[2][1]}\n
-   ----------------------\n 
-       #{@arr[0][2]} | #{@arr[1][2]} | #{@arr[2][2]}"
+    <<-HEREDOC
+       #{@arr[0][0]} | #{@arr[1][0]} | #{@arr[2][0]}
+      ---+---+---
+       #{@arr[0][1]} | #{@arr[1][1]} | #{@arr[2][1]}
+      ---+---+---
+       #{@arr[0][2]} | #{@arr[1][2]} | #{@arr[2][2]}
+    HEREDOC
   end
 
 end

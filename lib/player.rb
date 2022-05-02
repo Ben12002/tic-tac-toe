@@ -1,18 +1,11 @@
-require_relative 'symbols.rb'
 
 class Player
 
-  include Symbols
-  attr_reader :symbol
+  attr_reader :symbol, :num
 
-  def initialize(num)
-    if num == 1
-      @num = 1
-      @symbol = "X"
-    else
-      @num = 2
-      @symbol = "O"
-    end
+  def initialize(symbol, num)
+    @symbol = symbol
+    @num = num
   end
 
   def to_s
