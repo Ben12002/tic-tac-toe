@@ -55,21 +55,11 @@ class Game
   end
 
   def get_move_input
-    while true
-      action = gets.chomp
-      if valid_input?(action)
-        player_move = action.split(",")
-        if @board.valid_move?(player_move[0], player_move[1])
-          break
-        end
-      end
+    loop do
+      player_move = gets.chomp.split(",")
+      return player_move if @board.valid_move?(player_move[0], player_move[1])
       print "Invalid move. Please try again: "
     end
-    player_move
-  end
-
-  def valid_input?(input)
-    input.match(/[0-2],[0-2]/)
   end
 
   def get_symbol_input

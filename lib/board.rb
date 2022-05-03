@@ -45,7 +45,8 @@ class Board
   end
 
   def valid_move?(i,j)
-    @arr[i.to_i][j.to_i] == " "
+    # Order is crucial. Switching the order will lead to error if user types in numbers that exceed the bounds of array. 
+    ((i.to_i < 3) && (j.to_i < 3)) && (@arr[i.to_i][j.to_i] == " ")
   end
 
   def add_to_board(i,j,symbol)
