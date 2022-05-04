@@ -8,18 +8,24 @@ class Board
     @game_over = false
   end
 
+  # BEFORE REFACTOR:
+  # def board_full?
+  #   # use reduce to count number of " ". full if no. of " " == 0
+  #   empty_count = @arr.reduce(0) do |count, curr|
+  #     empty_per_col = curr.reduce(0) do |count2, curr2|
+  #       count2 += 1 if curr2 == " "
+  #       count2
+  #     end
+  #     count += empty_per_col
+  #     count
+  #   end
+
+  #   empty_count == 0
+  # end
+
   def board_full?
     # use reduce to count number of " ". full if no. of " " == 0
-    empty_count = @arr.reduce(0) do |count, curr|
-      empty_per_col = curr.reduce(0) do |count2, curr2|
-        count2 += 1 if curr2 == " "
-        count2
-      end
-      count += empty_per_col
-      count
-    end
-
-    empty_count == 0
+    @arr.none?{|row| row.include?(" ")}
   end
 
   def consecutive_three?(symbol)

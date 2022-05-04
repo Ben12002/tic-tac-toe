@@ -1,7 +1,7 @@
 
 class Game
 
-  attr_accessor :turn, :player_one, :player_two
+  attr_reader :turn, :board, :player_one, :player_two
 
   def initialize
     @board = Board.new
@@ -39,8 +39,21 @@ class Game
     end
   end
 
+
+
+  # Before refactor. while !<condition> changed to until <condition>
+  # -------------------------------
+  # def turns
+  #   while !game_over?
+  #     current_player = @turn.odd? ? @player_one : @player_two
+  #     turn(current_player)
+  #     display_board
+  #     @turn += 1
+  #   end
+  # end
+
   def turns
-    while !game_over?
+    until game_over?
       current_player = @turn.odd? ? @player_one : @player_two
       turn(current_player)
       display_board
@@ -48,11 +61,32 @@ class Game
     end
   end
 
+
+
+
   def turn(player)
     print player.to_s + "'s turn: "
     player_move = get_move_input
     move(player_move[0],player_move[1], player)
   end
+
+
+  # Before refactor. while true changed to loop do, using return instead of break (and implicit return)
+  #----------------------------------
+  # def get_move_input
+  #   while true
+  #     action = gets.chomp
+  #     if valid_input?(action)
+  #       player_move = action.split(",")
+  #       if @board.valid_move?(player_move[0], player_move[1])
+  #         break
+  #       end
+  #     end
+  #     print "Invalid move. Please try again: "
+  #   end
+  #   player_move
+  # end
+  #----------------------------------
 
   def get_move_input
     loop do
@@ -62,17 +96,41 @@ class Game
     end
   end
 
-  def get_symbol_input
 
-    while true
+
+
+  # Before refactor. while true changed to loop do, using return instead of break (and implicit return)
+  #----------------------------------
+  # def get_symbol_input
+
+  #   while true
+  #     answer = gets.chomp
+  #     if answer.length == 1
+  #       break
+  #     end
+  #     puts "Please enter only one character."
+  #   end
+  #   answer
+  # end
+  #----------------------------------
+
+  def get_symbol_input
+    loop do
       answer = gets.chomp
-      if answer.length == 1
-        break
-      end
+      return answer if answer.length == 1
       puts "Please enter only one character."
     end
-    answer
   end
+
+
+  # Before refactor. functionality moved to @board.valid_move? since this method requires 
+  # implementation details of the Board class.
+  #----------------------------------
+  # def valid_input?(input)
+  #   input.match(/[0-2],[0-2]/)
+  # end
+  #----------------------------------
+
 
   def game_over?
     player_one_wins = @board.consecutive_three?(@player_one.symbol)
